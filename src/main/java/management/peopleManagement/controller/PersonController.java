@@ -1,8 +1,11 @@
 package management.peopleManagement.controller;
 
 
+import lombok.AllArgsConstructor;
 import management.peopleManagement.dto.MessageResponseDTO;
 import management.peopleManagement.dto.request.PersonDTO;
+import management.peopleManagement.entity.Person;
+import management.peopleManagement.esception.PersonNotFoundException;
 import management.peopleManagement.mapper.PersonMapper;
 import management.peopleManagement.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,21 @@ public class PersonController {
         return personService.listAll();
     }
 
+    @GetMapping("/{id}")
+    public PersonDTO findById(@PathVariable Long id) throws PersonNotFoundException {
+        return personService.findById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable Long id) throws PersonNotFoundException {
+        personService.deleteById(id);
+    }
+
+    @PutMapping("/{id}")
+    public MessageResponseDTO updateById(@PathVariable Long id, @Valid @RequestBody PersonDTO personDTO) throws PersonNotFoundException {
+        return personService.updateById(id, personDTO);
+    }
     /*@GetMapping
     public String listPersons() {
         return personRepository.
