@@ -2,25 +2,32 @@ package management.peopleManagement.controller;
 
 
 import management.peopleManagement.dto.MessageResponseDTO;
-import management.peopleManagement.entity.Person;
-import management.peopleManagement.repository.PersonRepository;
+import management.peopleManagement.dto.request.PersonDTO;
+import management.peopleManagement.mapper.PersonMapper;
+import management.peopleManagement.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/v1/people")
 public class PersonController {
 
     @Autowired
-    private PersonRepository personRepository;
+    private PersonService personService;
 
     @PostMapping
-    public MessageResponseDTO createPerson(@RequestBody Person person){
-        Person savedPerson = personRepository.save(person);
-        return MessageResponseDTO.builder().message("Created Success. ID " + savedPerson.getId()).build();
+    @ResponseStatus(HttpStatus.CREATED)
+    public MessageResponseDTO createPerson(@Valid  @RequestBody PersonDTO personDTO) {
+        return personService.personSave(personDTO);
     }
+
+    /*@GetMapping
+    public String listPersons() {
+        return personRepository.
+    }*/
 /*
     @PostMapping
     public ResponseEntity<Person> createPerson(@Validated @RequestBody Person person){
